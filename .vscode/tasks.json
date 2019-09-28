@@ -1,0 +1,32 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "create_directory",
+            "type": "shell",
+            "command": "[ -d build ] || mkdir build",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            }
+        },
+        {
+            "label": "cmake",
+            "type": "shell",
+            "command": "cmake",
+            "args": [ ".." ],
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "dependsOn": ["create_directory"]
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "make",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "dependsOn": ["cmake"]
+        }
+    ]
+}
