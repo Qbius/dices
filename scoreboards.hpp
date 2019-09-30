@@ -78,7 +78,12 @@ inline QLineEdit* scoring_section(const std::vector<QLineEdit*>& scores, bool up
             const int score_sum = std::accumulate(scores.begin(), scores.end(), 0, [](int sum, QLineEdit* edit){
                 return sum + edit->text().toInt();
             });
-            label->setText(QString::number(score_sum + (upper ? 50 * ((score_sum > 0) - (score_sum < 0)) : 0)));
+            const int bonus = upper ?
+                50 * ((score_sum > 0) - (score_sum < 0)) :
+                (std::any_of(scores.begin(), scores.end(), [](QLineEdit* edit){ 
+                    return edit->isEnabled() && edit->text().toInt() == 0; 
+                }) ? 0 : 100);
+            label->setText(QString::number(score_sum + bonus));
         });
     }
     return label;
